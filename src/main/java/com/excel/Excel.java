@@ -49,45 +49,6 @@ public final class Excel<D> extends AbstractExcel {
     }
 
     /**
-     * 指定数据类型
-     *
-     * @param dataType 数据类型
-     * @param <T>      数据类型
-     * @return Excel
-     */
-    public static <T> Excel<T> dataType(Class<T> dataType) {
-        return new Excel<>(dataType);
-    }
-
-    /**
-     * 文件全路径
-     * File full path
-     *
-     * @param fileName 文件全路径(File full path)
-     * @return Excel
-     */
-    public Excel<D> fileName(String fileName) {
-        if (fileName != null && !fileName.isEmpty()) {
-            if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")) {
-                this.fileName = fileName;
-                return this;
-            }
-        }
-        throw new FileNotFindException("file name is error");
-    }
-
-    /**
-     * sheet name
-     *
-     * @param sheet sheet
-     * @return Excel
-     */
-    public Excel<D> sheet(String sheet) {
-        super.sheet = sheet;
-        return this;
-    }
-
-    /**
      * 获取文件输出流
      * Get the file output stream
      *
@@ -124,5 +85,44 @@ public final class Excel<D> extends AbstractExcel {
             throw new StreamCreateException("file is reading");
         }
 
+    }
+
+    /**
+     * 指定数据类型
+     *
+     * @param dataType 数据类型
+     * @param <T>      数据类型
+     * @return Excel
+     */
+    public static <T> Excel<T> dataType(Class<T> dataType) {
+        return new Excel<>(dataType);
+    }
+
+    /**
+     * 文件全路径
+     * File full path
+     *
+     * @param fileName 文件全路径(File full path)
+     * @return Excel
+     */
+    public Excel<D> fileName(String fileName) {
+        if (fileName != null && !fileName.isEmpty()) {
+            if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")) {
+                this.fileName = fileName;
+                return this;
+            }
+        }
+        throw new FileNotFindException("file name is error");
+    }
+
+    /**
+     * sheet name
+     *
+     * @param sheet sheet
+     * @return Excel
+     */
+    public Excel<D> sheet(String sheet) {
+        super.sheet = sheet;
+        return this;
     }
 }
