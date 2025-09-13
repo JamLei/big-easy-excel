@@ -1,8 +1,7 @@
 package com.excel.anno;
 
-import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.usermodel.XSSFFont;
 
 import java.lang.annotation.*;
 
@@ -50,6 +49,13 @@ public @interface ExcelAnno {
      * backgroundColor
      */
     IndexedColors backgroundColor() default IndexedColors.WHITE;
+
+    /**
+     * 填充样式
+     * <p>
+     * fillPatternType
+     */
+    FillPatternType fillPatternType() default FillPatternType.SOLID_FOREGROUND;
 
     /**
      * 是否水平居中

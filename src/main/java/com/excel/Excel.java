@@ -2,27 +2,24 @@ package com.excel;
 
 import com.excel.exception.ExcelException;
 import com.excel.exception.FileNotFindException;
+import com.excel.exception.StreamCreateException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * excel 入口使用类
+ * 本地excel文件入口使用类
  * Excel entry using classes
  *
  * @author heng.lei
  */
 public final class Excel<D> extends AbstractExcel {
-
-    /**
-     * 文件全路径
-     * File full path
-     */
-    private String fileName;
 
 
     private Excel(Class<D> dataClass) {
@@ -39,31 +36,7 @@ public final class Excel<D> extends AbstractExcel {
      */
     @Override
     public <T> void doWrite(List<T> dataList) {
-        Workbook workbook = null;
-        OutputStream outStream = null;
-        try {
-            workbook = new XSSFWorkbook();
-            write(workbook, dataList);
-            outStream = getOutputStream(fileName);
-            workbook.write(outStream);
-        } catch (Exception e) {
-            throw new ExcelException(e);
-        } finally {
-            if (workbook != null) {
-                try {
-                    workbook.close();
-                } catch (IOException e) {
-
-                }
-            }
-            if (outStream != null) {
-                try {
-                    outStream.close();
-                } catch (IOException e) {
-                }
-            }
-
-        }
+        write(dataList);
     }
 
 
@@ -77,7 +50,7 @@ public final class Excel<D> extends AbstractExcel {
      */
     @Override
     public <R> List<R> doRead(Class<R> clazz) {
-        return null;
+        return read(clazz);
     }
 
     /**
@@ -119,4 +92,42 @@ public final class Excel<D> extends AbstractExcel {
         return this;
     }
 
+    /**
+     * 获取文件输出流
+     * Get the file output stream
+     *
+     * @param fileName 文件路径(File path)
+     * @return OutputStream
+     */
+    @Override
+    protected OutputStream getOutputStream(String fileName) {
+        File file = checkFileNameAndCreateFile(fileName);
+        try {
+            return new BufferedOutputStream(Files.newOutputStream(file.toPath()));
+        } catch (Exception e) {
+            throw new StreamCreateException("file is reading");
+        }
+    }
+
+
+    /**
+     * 获取文件输入流
+     * Get the file input stream
+     *
+     * @param fileName 文件路径(File path)
+     * @return InputStream
+     */
+    @Override
+    protected InputStream getInputStream(String fileName) {
+        File file = checkFileNameAndCreateFile(fileName);
+        if (!file.exists()) {
+            throw new FileNotFindException("file not found");
+        }
+        try {
+            return new BufferedInputStream(Files.newInputStream(file.toPath()));
+        } catch (Exception e) {
+            throw new StreamCreateException("file is reading");
+        }
+
+    }
 }

@@ -16,7 +16,7 @@ public interface ExcelInterface {
      * @param data 数据(data)
      * @param <T>  object type
      */
-    <T> void doWrite(List<T> data) throws IllegalAccessException;
+    <T> void doWrite(List<T> data);
 
     /**
      * 从excel中读取数据
